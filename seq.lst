@@ -1,0 +1,97 @@
+CCS PCM C Compiler, Version 4.124, 5967               28-ago-12 16:04
+
+               Filename: C:\Documents and Settings\Cuki\Desktop\seq.lst
+
+               ROM used: 49 words (2%)
+                         Largest free fragment is 1999
+               RAM used: 17 (8%) at main() level
+                         17 (8%) worst case
+               Stack:    0 locations
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   004
+0003:  NOP
+.................... #include <16F628A.h> 
+.................... //////// Standard Header file for the PIC16F628A device //////////////// 
+.................... #device PIC16F628A 
+.................... #list 
+....................  
+....................  
+.................... #fuses HS 
+....................  
+.................... #use delay(clock=4MHz) 
+.................... #use rs232(XMIT=pin_b2, BAUD=9600) 
+....................  
+.................... #define A pin_a0 
+.................... #define B pin_a1 
+.................... #define C pin_a2 
+.................... #define t0_freq 84 
+.................... #define buffer_size 8 
+....................  
+.................... int array[buffer_size]; 
+.................... int cont; 
+....................  
+.................... int main (void){ 
+0004:  CLRF   04
+0005:  BCF    03.7
+0006:  MOVLW  1F
+0007:  ANDWF  03,F
+0008:  BSF    03.5
+0009:  BCF    06.2
+000A:  BCF    03.5
+000B:  BSF    06.2
+000C:  MOVLW  07
+000D:  MOVWF  1F
+....................  
+.................... 	while(true) { 
+.................... 		while(!input(pin_a0)); 
+000E:  BSF    03.5
+000F:  BSF    05.0
+0010:  BCF    03.5
+0011:  BTFSS  05.0
+0012:  GOTO   00E
+.................... 		output_toggle(pin_b0); 
+0013:  BSF    03.5
+0014:  BCF    06.0
+0015:  MOVLW  01
+0016:  BCF    03.5
+0017:  XORWF  06,F
+.................... 		array[cont] = input_a() & 0b111; 
+0018:  MOVLW  20
+0019:  ADDWF  28,W
+001A:  MOVWF  04
+001B:  BCF    03.7
+001C:  MOVLW  FF
+001D:  BSF    03.5
+001E:  MOVWF  05
+001F:  BCF    03.5
+0020:  MOVF   05,W
+0021:  ANDLW  07
+0022:  MOVWF  00
+.................... 		cont++; 
+0023:  INCF   28,F
+.................... 		if(cont == buffer_size) 
+0024:  MOVF   28,W
+0025:  SUBLW  08
+0026:  BTFSC  03.2
+.................... 			cont = 0; 
+0027:  CLRF   28
+.................... 		while(input(pin_a0)); 
+0028:  BSF    03.5
+0029:  BSF    05.0
+002A:  BCF    03.5
+002B:  BTFSC  05.0
+002C:  GOTO   028
+.................... 	} 
+002D:  GOTO   00E
+....................  
+.................... 	return 0; 
+002E:  MOVLW  00
+002F:  MOVWF  78
+.................... } 
+0030:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3F62   NOWDT PUT HS MCLR BROWNOUT NOLVP NOCPD NOPROTECT
